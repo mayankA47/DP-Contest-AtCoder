@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define int long long
+#define mp make_pair
+#define ff first
+#define ss second
+#define inf 9e18
+#define pii pair<int,int>
+#define fastio ios_base::sync_with_stdio(0);  cin.tie(0); cout.tie(0);
+using namespace std;
+int dp[100005][3];
+int solve(int pos,int act,int a[][3],int &n){
+    if(pos==n)
+        return 0;
+    if(dp[pos][act]!=-1)
+        return dp[pos][act];
+    int ans = a[pos][act];
+    for(int i=0;i<3;i++){
+        if(i==act)
+            continue;
+        ans = max(ans,a[pos][act] + solve(pos+1,i,a,n));
+    }
+    return dp[pos][act] = ans;
+}
+int32_t main()
+{
+    
+    fastio
+    int n;
+    cin>>n;
+    int a[n][3];
+ 
+    
+    for(int i=0;i<n;i++)
+        for(int activity=0;activity<3;activity++)
+            cin>>a[i][activity],dp[i][activity]=-1;
+ 
+    int ans = 0;
+    for(int i=0;i<3;i++)
+        ans = max(ans,solve(0,i,a,n));
+    cout<<ans;
+    return 0;
+}
