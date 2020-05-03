@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define int long long
+#define mp make_pair
+#define ff first
+#define ss second
+#define inf 9e18
+#define pii pair<int,int>
+#define fastio ios_base::sync_with_stdio(0);  cin.tie(0); cout.tie(0);
+using namespace std;
+vector<pair<int,int> > v;
+
+int n,W;
+int dp[102][100005];
+int32_t main()
+{
+    
+    fastio
+  
+    cin>>n>>W;
+    for(int i=0;i<n;i++){
+        pii p;
+        cin>>p.ff>>p.ss;
+        v.pb(p);
+    }
+    // ans = max(v[i] + dp[i+1][W-w[i]],dp[i+1][W]);
+    for(int i=0;i<n;i++)
+        for(int j=0;j<100001;j++)
+            dp[i][j] = 1000000000000000;
+
+ //   cout<<solve(0,W);
+    dp[0][0] = 0;
+    dp[0][v[0].ss] = v[0].ff;
+    for(int i=1;i<n;i++){
+        for(int j=0;j<100001;j++){
+            dp[i][j] = dp[i-1][j];
+            if(j-v[i].ss>=0)
+                dp[i][j] = min(dp[i][j],v[i].ff + dp[i-1][j-v[i].ss]);
+        }
+    }
+    int ans = 0;
+    for(int i=0;i<100001;i++)
+        if(dp[n-1][i]<=W)
+            ans = i;
+    cout<<ans;
+    return 0;
+}
