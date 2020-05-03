@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define int long long
+#define mp make_pair
+#define ff first
+#define ss second
+#define inf 9e18
+#define pii pair<int,int>
+#define setp(x) fixed<<showpoint<<setprecision(x)
+#define fastio ios_base::sync_with_stdio(0);  cin.tie(0); cout.tie(0);
+using namespace std;
+int n;
+long double a[3000];
+long double ans = 0.0;
+long double dp[3000][1505];
+int cnt=0;
+long double solve(int i,int t){
+    if(t<0)
+        return 0;
+    if(i==n){
+       return  1;
+    }
+    if(dp[i][t]!=-1)
+        return dp[i][t];
+    long double a1,a2;
+    a1=a2=0;
+    a1 = (1-a[i])*solve(i+1,t-1);
+    a2 = a[i]*solve(i+1,t);
+    return dp[i][t] = a1+a2;
+}
+int32_t main()
+{
+    
+    fastio
+   #ifndef ONLINE_JUDGE
+    // for getting input from input.txt
+    freopen("input.txt", "r", stdin);
+    // for writing output to output.txt
+    freopen("output.txt", "w", stdout);
+  #endif
+    cin>>n;
+    for(int i=0;i<n;i++)
+        cin>>a[i];
+    for(int i=0;i<3000;i++)
+        for(int j=0;j<1505;j++)
+            dp[i][j] = -1;
+    ans = solve(0,n/2);
+    
+    cout<<setp(10)<<ans;
+    return 0;
+}
