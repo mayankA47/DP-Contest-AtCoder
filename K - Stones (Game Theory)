@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define int long long
+#define mp make_pair
+#define ff first
+#define ss second
+#define inf 9e18
+#define pii pair<int,int>
+#define ALL(x) x.begin(),x.end()
+#define fastio ios_base::sync_with_stdio(0);  cin.tie(0); cout.tie(0);
+using namespace std;
+int n,K;
+vector<int> v;
+int dp[100005][2];
+bool play(int k,int turn){
+    if(k==0)
+        return turn==0;
+    if(dp[k][turn]!=-1)
+        return dp[k][turn];
+    bool ans;
+    if(turn)
+        ans=0;
+    else
+        ans=1;
+
+  //  bool picked = 0;
+    for(int &i:v){
+        if(i<=k){
+          //  picked = 1;
+            if(turn)
+                ans = play(k-i,turn^1)||ans;
+            else
+                ans = play(k-i,turn^1)&&ans;
+        }
+    }
+    return dp[k][turn]=ans;
+}
+int32_t main()
+{
+    
+    fastio
+     #ifndef ONLINE_JUDGE
+    // for getting input from input.txt
+    freopen("input.txt", "r", stdin);
+    // for writing output to output.txt
+    freopen("output.txt", "w", stdout);
+     #endif
+    
+    cin>>n>>K;
+    for(int i=0;i<n;i++){
+        int b;
+        cin>>b;
+        v.pb(b);
+    }
+    for(int i=0;i<=K;i++)
+        dp[i][0]=dp[i][1]=-1;
+    bool ans = play(K,1);
+    if(ans)
+        cout<<"First";
+    else
+        cout<<"Second";
+
+
+    return 0;
+}
