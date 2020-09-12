@@ -1,0 +1,95 @@
+//IN THE NAME OF LORD
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define ff              first
+#define ss              second
+#define int              long long 
+#define pb              push_back
+#define mp              make_pair
+#define pii             pair<int,int>
+#define vi              vector<int>
+#define vvi             vector<vector<int>>
+#define mii             map<int,int>
+#define pqb             priority_queue<int>
+#define pqs             priority_queue<int,vi,greater<int> >
+#define setbits(x)      __builtin_popcountll(x)
+#define zrobits(x)      __builtin_ctzll(x)
+#define mod             1000000007
+#define inf             9e18
+#define ALL(a)          a.begin(),a.end()
+#define ps(x,y)         fixed<<setprecision(y)<<x
+#define mk(arr,n,type)  type *arr=new type[n];
+#define w(x)            int x; cin>>x; while(x--)
+#define from(i,n)       for(int i=0;i<(int)n;i++)
+#define from_j(i,j,n)   for(int i=j;i<(int)n;i++)
+mt19937                 rng(chrono::steady_clock::now().time_since_epoch().count());
+ 
+//typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> pbds;
+ 
+void c_p_c()
+{
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+}
+string s;
+int N;
+int dp[3003][3003];
+int findans(int i,int small){
+  if(small<0 || small>N-i-1)
+    return 0;
+  if(i==N-1)
+    return 1;
+  if(dp[i][small]!=-1)
+    return dp[i][small];
+  int ans = 0;
+  if(s[i]=='>')
+    ans = (findans(i,small-1) + findans(i+1,small-1))%mod;
+  
+  else
+    ans = (findans(i,small+1) + findans(i+1,small))%mod;
+
+  return dp[i][small] = ans;
+}
+int32_t main()
+{
+    c_p_c();                    
+    cin>>N>>s;
+    int ans = 0;
+    for(int i=0;i<=N+1;i++)
+      for(int j=0;j<=N+1;j++)
+        dp[i][j] = (i==N-1)?1:0;
+
+    for(int i=s.length()-1;i>=0;i--){
+      int from,to,inc;
+      if(s[i]=='>')
+        from = 0, to = N, inc = 1;
+      else
+        from = N, to = -1, inc = -1;
+      for(int j=from;j!=to;j+=inc){
+            
+            if(s[i]=='>')
+              dp[i][j] = (j-1>=0?(dp[i][j-1]+dp[i+1][j-1]):0)%mod;
+            else
+              dp[i][j] = (j+1<N-i-1?dp[i][j+1]:0) + (j<N-i-1?dp[i+1][j]:0)%mod;
+          
+      }
+    }
+
+
+    for(int i=1;i<=N;i++){
+      ans = ( ans+dp[0][i-1])%mod;
+     // cout<<ans<<endl;
+    }
+    ans = (ans+mod)%mod;
+    cout<<ans;
+
+
+
+ cerr << "proc time: " << 1.0 * clock() / CLOCKS_PER_SEC << "s    ";
+    return 0;
+        
+}
